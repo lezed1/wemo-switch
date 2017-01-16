@@ -11,45 +11,45 @@ led_pin = 4
 
 
 try:
-	## WeMo
+    ## WeMo
 
-	def on_switch(switch):
-	    print("Switch found!", switch.name)
+    def on_switch(switch):
+        print("Switch found!", switch.name)
 
-	def on_motion(motion):
-	    print("Motion found!", motion.name)
+    def on_motion(motion):
+        print("Motion found!", motion.name)
 
-	env = Environment(on_switch, on_motion)
-	env.start()
-	env.discover(seconds=5)
+    env = Environment(on_switch, on_motion)
+    env.start()
+    env.discover(seconds=5)
 
-	lamp_wemo_switch = env.get_switch('Lamp')
-
-
-	## GPIO
-
-	state = False
-
-	GPIO.setmode(GPIO.BCM)
-
-	GPIO.setup(switch_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-	GPIO.setup(led_pin, GPIO.OUT)
+    lamp_wemo_switch = env.get_switch('Lamp')
 
 
-	## Puttin it together!
+    ## GPIO
 
-	def switch_handler(channel):
-	    global state
-	    lamp_wemo_switch.set_state(state)
-	    state = not state
-	    GPIO.output(led_pin, state)
-	    print("Got button press! (on channel {})".format(channel))
+    state = False
 
+    GPIO.setmode(GPIO.BCM)
 
-	GPIO.add_event_detect(switch_pin, GPIO.RISING, callback=switch_handler, bouncetime=750)
+    GPIO.setup(switch_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+    GPIO.setup(led_pin, GPIO.OUT)
 
 
-	input("Ready to go! Press enter to end")
+    ## Puttin it together!
+
+    def switch_handler(channel):
+        global state
+        lamp_wemo_switch.set_state(state)
+        state = not state
+        GPIO.output(led_pin, state)
+        print("Got button press! (on channel {})".format(channel))
+
+
+    GPIO.add_event_detect(switch_pin, GPIO.RISING, callback=switch_handler, bouncetime=750)
+
+
+    input("Ready to go! Press enter to end")
 
 finally:
-	GPIO.cleanup()
+    GPIO.cleanup()
