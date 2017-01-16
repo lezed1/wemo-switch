@@ -6,6 +6,7 @@ from RPi import GPIO
 
 switch_pin = 27
 led_pin = 4
+wemo_lamp_name = "Lamp"
 
 ### Configure these ^^ ###
 
@@ -23,7 +24,7 @@ try:
     env.start()
     env.discover(seconds=5)
 
-    lamp_wemo_switch = env.get_switch('Lamp')
+    lamp_wemo_switch = env.get_switch(wemo_lamp_name)
 
 
     ## GPIO
