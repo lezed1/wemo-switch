@@ -25,12 +25,11 @@ try:
     env.discover(seconds=5)
 
     lamp_wemo_switch = env.get_switch(wemo_lamp_name)
-    lamp_wemo_switch.set_state(True)
 
 
     ## GPIO
 
-    state = False
+    state = True
 
     GPIO.setmode(GPIO.BCM)
 
@@ -50,6 +49,7 @@ try:
 
     GPIO.add_event_detect(switch_pin, GPIO.RISING, callback=switch_handler, bouncetime=750)
 
+    switch_handler("FAKE CHANNEL ON START")
 
     input("Ready to go! Press enter to end")
 
