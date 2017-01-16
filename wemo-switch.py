@@ -17,6 +17,7 @@ GPIO.setup(switch_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(led_pin, GPIO.OUT)
 
 def switch_handler(channel):
+    global state
     state = not state
     GPIO.output(led_pin, state)
     print("Got button press! (on channel {})".format(channel))
