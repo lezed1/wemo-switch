@@ -25,6 +25,7 @@ try:
     env.discover(seconds=5)
 
     lamp_wemo_switch = env.get_switch(wemo_lamp_name)
+    lamp_wemo_switch.set_state(True)
 
 
     ## GPIO
