@@ -1,3 +1,5 @@
+import threading
+
 from ouimeaux.environment import Environment
 from RPi import GPIO
 
@@ -29,7 +31,7 @@ try:
 
     ## GPIO
 
-    state = True
+    state = lamp_wemo_switch.get_state()
 
     GPIO.setmode(GPIO.BCM)
 
@@ -41,15 +43,24 @@ try:
 
     def switch_handler(channel):
         global state
-        lamp_wemo_switch.set_state(state)
         state = not state
-        GPIO.output(led_pin, state)
+        lamp_wemo_switch.set_state(state)
+        GPIO.output(led_pin, not state)
         print("Got button press! (on channel {})".format(channel))
 
 
     GPIO.add_event_detect(switch_pin, GPIO.RISING, callback=switch_handler, bouncetime=750)
 
-    switch_handler("FAKE CHANNEL ON START")
+    def poll_switch():
+        print("Polling!")
+        global state
+        state = lamp_wemo_switch.get_state()
+        GPIO.output(led_pin, not state)
+        timer = threading.Timer(5, poll_switch)
+        timer.daemon = True
+        timer.start()
+
+    poll_switch()
 
     input("Ready to go! Press enter to end")
 
